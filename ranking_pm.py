@@ -387,7 +387,8 @@ if login:
             st.session_state['user_name'] = user_name
             st.session_state['password'] = real_password
             st.session_state['group'] =  group
-            st.success(f'{user_first_name} from group ({group}) succesfully log-in', icon="✅")
+            with st.sidebar:
+                st.success(f'{user_first_name} from group ({group}) succesfully log-in', icon="✅")
 
 with st.sidebar:
     if st.session_state['user_name'] != '':
@@ -609,7 +610,8 @@ if selected == "Ranking":
         submissions_log_df = conn.read(worksheet="game_log", usecols=list(range(df_n_cols)), ttl=1).dropna(how="all")
         default_time = pd.to_datetime('01/01/1901, 00:00:00',format="%d/%m/%Y, %H:%M:%S")
         ranking_list = []
-        for gr in ['G1','G2','G3','G4','PR']:
+        GROUPS = list(submissions_log_df['group'].unique())
+        for gr in GROUPS:
             mini_df = submissions_log_df[(submissions_log_df['group'] == gr) & (submissions_log_df['valid'] == 'YES')]
             if len(mini_df) == 0:
                 row = {'group':gr,'Project Duration':1_000,'time':default_time}
